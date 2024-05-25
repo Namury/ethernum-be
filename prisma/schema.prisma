@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../src/generated/client"
+  binaryTargets = ["native", "debian-openssl-1.0.x", "debian-openssl-1.1.x"]
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model Accounts {
+  AccountID                  Int       @unique @default(autoincrement())
+  AccountName                String    @unique @db.NVarChar(50)
+  name                       String
+  email                      String    @unique
+  QQ3462895993               String
+  AccountLevelCode           Int       @default(0)
+  CharacterCreateLimit       Int       @default(6)
+  CharacterMaxCount          Int       @default(6)
+  RegisterDate               DateTime  @default(now())
+  PublisherCode              Int       @default(0)
+  SecondAuthFailCount        Int       @default(0)
+  SecondAuthCode             Int       @default(1)
+  SecondAuthLockFlag         Boolean   @default(false) @db.Bit
+  ResetToken                 String?
+  ResetTokenExpiresAt        DateTime?
+  PasswordResetRequested     Int?
+  PasswordResetRequestedAt   DateTime?
+  VerificationToken          String?
+  VerificationTokenExpiresAt DateTime?
+  EmailVerified              Boolean   @default(false) @db.Bit
+  ReferralCode               String?
+  Donors                     Donors[]
+  VipRank                    VipRank[]
+  Orders                     Orders[]
+}
+
+model Donors {
+  id             String   @unique @default(uuid())
+  DonorName      String
+  DonationAmount String
+  AccountID      Int
+  Accounts       Accounts @relation(fields: [AccountID], references: [AccountID])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model VipRank {
+  id        String   @unique @default(uuid())
+  username  String
+  point     Int
+  AccountID Int
+  Accounts  Accounts @relation(fields: [AccountID], references: [AccountID])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Orders {
+  id        String   @unique @default(uuid())
+  username  String
+  email     String
+  reffcode  String
+  order_id  Int
+  amount    Decimal
+  status    String
+  AccountID Int
+  Accounts  Accounts @relation(fields: [AccountID], references: [AccountID])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
