@@ -3,7 +3,7 @@
 
 generator client {
   provider      = "prisma-client-js"
-  output        = "../src/generated/client"
+  // output        = "../src/generated/client"
   binaryTargets = ["native", "debian-openssl-1.0.x", "debian-openssl-1.1.x"]
 }
 
@@ -40,7 +40,7 @@ model Accounts {
 }
 
 model Donors {
-  id             String   @unique @default(uuid())
+  id             Int      @unique @default(autoincrement())
   DonorName      String
   DonationAmount String
   AccountID      Int
@@ -50,7 +50,7 @@ model Donors {
 }
 
 model VipRank {
-  id        String   @unique @default(uuid())
+  id        Int      @unique @default(autoincrement())
   username  String
   point     Int
   AccountID Int
@@ -61,7 +61,7 @@ model VipRank {
 }
 
 model Orders {
-  id        String   @unique @default(uuid())
+  id        Int      @unique @default(autoincrement())
   username  String
   email     String
   reffcode  String
@@ -72,4 +72,13 @@ model Orders {
   Accounts  Accounts @relation(fields: [AccountID], references: [AccountID])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model TopUpEvent {
+  id           Int      @unique @default(autoincrement())
+  dateStart    DateTime
+  dateEnd      DateTime
+  bonusPercent Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }

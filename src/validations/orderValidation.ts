@@ -11,7 +11,7 @@ export function validateCreateOrderRequest(
 
   if (!username) return response_bad_request(res, "username is required");
   if (!email) return response_bad_request(res, "email is required");
-  if (!reffcode) return response_bad_request(res, "reffcode is required");
+  // if (!reffcode) return response_bad_request(res, "reffcode is required");
   if (!order_id) return response_bad_request(res, "order_id is required");
   if (!amount) return response_bad_request(res, "amount is required");
   if (!status) return response_bad_request(res, "status is required");

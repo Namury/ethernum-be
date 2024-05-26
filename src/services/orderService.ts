@@ -6,6 +6,37 @@ export async function createOrderService(
   order: CreateOrderRequest
 ): Promise<response> {
   try {
+    let amountMultiplier = 1;
+
+    //check current top up event
+    const today = new Date();
+
+    const findTopUpEvent = await prisma.topUpEvent.findFirst({
+      where: {
+        AND: [
+          { dateStart: { lte: today } },
+          { dateEnd: { gte: today } }
+        ]
+      }
+    })
+
+    if (findTopUpEvent) {
+      amountMultiplier = amountMultiplier + (findTopUpEvent.bonusPercent / 100) //add multiplier percentage
+    }
+
+    //check reffcode
+    if (order.reffcode) {
+      const findReffcode = await prisma.accounts.findFirst({
+        where: { ReferralCode: order.reffcode },
+        select: { AccountID: true }
+      })
+
+      if (findReffcode) {
+        amountMultiplier = amountMultiplier + 0.05 // add 5% to amount multiplier
+      }
+    }
+
+    order.amount = order.amount * amountMultiplier
     const createdOrder = await prisma.orders.create({
       data: { ...order }
     });

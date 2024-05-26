@@ -50,7 +50,7 @@ export async function validateRegisterRequest(
     // const filteredInputEmail = email.replace(".", "")
 
     const regexSaltedEmail = /^.*\+\d.*$/
-    if (!regexSaltedEmail.test(email)) return response_bad_request(res, "Email contains illegal symbol");
+    if (regexSaltedEmail.test(email)) return response_bad_request(res, "Email contains illegal symbol");
 
     const checkEmail = await prisma.accounts.findUnique({
       where: {
@@ -71,10 +71,13 @@ export function validateVerifyUserRequest(
   res: Response,
   next: NextFunction
 ) {
-  const { email, verifyToken }: VerifyUserRequest = req.body;
+  const email = String(req.query.email);
+  const verifyToken = String(req.query.verify_token);
+  
+  const userData: VerifyUserRequest = { email, verifyToken }
 
-  if (!email) return response_bad_request(res, "Email is required");
-  if (!verifyToken) return response_bad_request(res, "Verify Token is required");
+  if (!userData.email) return response_bad_request(res, "Email is required");
+  if (!userData.verifyToken) return response_bad_request(res, "Verify Token is required");
   next();
 }
 

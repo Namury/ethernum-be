@@ -6,6 +6,7 @@ import { response } from "$utils/response.utils";
 import { emailRegex, ForgotPasswordRequest, LoginResponse, RegisterRequest, ResetPasswordRequest, UserToken, VerifyUserRequest } from "$utils/auth.utils";
 import { sendMail } from "$utils/mail.utils";
 import { emailResetPassword, emailVerify } from "$utils/mailTemplate.utils";
+import { createRandomString } from "$utils/common.utils";
 
 function createToken(user: UserToken) {
   const token = jwt.sign(
@@ -77,14 +78,14 @@ export async function authRegisterService(
 ): Promise<response> {
   try {
     const selectedUserField = {
-      AccountId: true,
+      AccountID: true,
       email: true,
       name: true,
       AccountName: true
     };
     user.password = md5(user.password);
 
-    const verificationToken = Math.random().toString(16).substring(0, 16)
+    const verificationToken = createRandomString(16)
     const createdUser = await prisma.accounts.create({
       data: {
         email: user.email,
@@ -123,14 +124,20 @@ export async function authVerifyUserService(
 ): Promise<response> {
   try {
     const selectedUserField = {
-      AccountId: true,
+      AccountID: true,
       email: true,
       name: true,
       AccountName: true
     };
 
-    const user = await prisma.accounts.findUnique({
-      where: { email: verifyRequest.email }
+    const today = new Date();
+
+    const user = await prisma.accounts.findFirst({
+      where: {
+        email: verifyRequest.email,
+        VerificationToken: verifyRequest.verifyToken,
+        VerificationTokenExpiresAt: { gte: today }
+      }
     })
 
     if (!user) {
@@ -148,7 +155,7 @@ export async function authVerifyUserService(
 
     const token = createToken({
       email: updatedUser.email,
-      id: updatedUser.AccountId,
+      id: updatedUser.AccountID,
       username: updatedUser.AccountName,
     });
 
@@ -192,8 +199,8 @@ export async function authForgotPasswordService(
       }
     });
 
-    const verifyUrl = `${process.env.BASE_URL_FE?.toString()}forgot?reset_token=${resetToken}`
-    const html = emailResetPassword(verifyUrl)
+    const resetPasswordUrl = `${process.env.BASE_URL_FE?.toString()}forgot?reset_token=${resetToken}`
+    const html = emailResetPassword(resetPasswordUrl)
     const subject = 'Reset Password Notification'
     await sendMail(html, updatedUser.email, subject);
 
@@ -218,15 +225,20 @@ export async function authResetPasswordService(
 ) {
   try {
     const selectedUserField = {
-      AccountId: true,
+      AccountID: true,
       email: true,
       name: true,
       AccountName: true
     };
 
+    const today = new Date();
 
-    const user = await prisma.accounts.findUnique({
-      where: { email: resetPasswordRequest.email }
+    const user = await prisma.accounts.findFirst({
+      where: {
+        email: resetPasswordRequest.email,
+        ResetToken: resetPasswordRequest.resetToken,
+        ResetTokenExpiresAt: { gte: today }
+      }
     })
 
     if (!user) {
