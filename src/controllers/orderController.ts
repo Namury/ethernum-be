@@ -10,6 +10,8 @@ import { CreateOrderRequest, GetOrderByUserRequest } from "$utils/order.utils";
 export async function createOrder(req: Request, res: Response) {
   try {
     const orderData: CreateOrderRequest = req.body
+    orderData.order_id = Number(orderData.order_id)
+    orderData.AccountID = Number(orderData.AccountID)
 
     const { status, data, error } = await createOrderService(orderData);
     if (status) {
@@ -23,7 +25,7 @@ export async function createOrder(req: Request, res: Response) {
   }
 }
 
-export async function getORderByUser(req: Request, res: Response) {
+export async function getOrderByUser(req: Request, res: Response) {
   try {
     const user_id = Number(req.params.user_id);
 

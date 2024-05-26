@@ -36,6 +36,7 @@ export async function createOrderService(
       }
     }
 
+
     order.amount = order.amount * amountMultiplier
     const createdOrder = await prisma.orders.create({
       data: { ...order }
