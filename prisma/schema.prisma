@@ -13,30 +13,31 @@ datasource db {
 }
 
 model Accounts {
-  AccountID                  Int       @unique @default(autoincrement())
-  AccountName                String    @unique @db.NVarChar(50)
+  AccountID                  Int          @unique @default(autoincrement())
+  AccountName                String       @unique @db.NVarChar(50)
   name                       String
-  email                      String    @unique
+  email                      String       @unique
   QQ3462895993               String
-  AccountLevelCode           Int       @default(0)
-  CharacterCreateLimit       Int       @default(6)
-  CharacterMaxCount          Int       @default(6)
-  RegisterDate               DateTime  @default(now())
-  PublisherCode              Int       @default(0)
-  SecondAuthFailCount        Int       @default(0)
-  SecondAuthCode             Int       @default(1)
-  SecondAuthLockFlag         Boolean   @default(false) @db.Bit
+  AccountLevelCode           Int          @default(0)
+  CharacterCreateLimit       Int          @default(6)
+  CharacterMaxCount          Int          @default(6)
+  RegisterDate               DateTime     @default(now())
+  PublisherCode              Int          @default(0)
+  SecondAuthFailCount        Int          @default(0)
+  SecondAuthCode             Int          @default(1)
+  SecondAuthLockFlag         Boolean      @default(false) @db.Bit
   ResetToken                 String?
   ResetTokenExpiresAt        DateTime?
   PasswordResetRequested     Int?
   PasswordResetRequestedAt   DateTime?
   VerificationToken          String?
   VerificationTokenExpiresAt DateTime?
-  EmailVerified              Boolean   @default(false) @db.Bit
+  EmailVerified              Boolean      @default(false) @db.Bit
   ReferralCode               String?
   Donors                     Donors[]
   VipRank                    VipRank[]
   Orders                     Orders[]
+  Characters                 Characters[]
 }
 
 model Donors {
@@ -81,4 +82,38 @@ model TopUpEvent {
   bonusPercent Int
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+model PVPRanking {
+  CharacterName String @unique @db.NVarChar(50)
+  GuildName     String @db.NVarChar(50)
+  PVPExp        Int
+  Kill          Int
+  Death         Int
+}
+
+model PVERanking {
+  CharacterName  String   @unique @db.NVarChar(50)
+  GuildName      String   @db.NVarChar(50)
+  TotalRank      Int
+  DifficultyStep Int      @db.SmallInt
+  ClearTime      DateTime
+  MapID          Int
+}
+
+model Characters {
+  CharacterID      Int              @unique
+  CharacterName    String           @db.NVarChar(30)
+  AccountID        Int
+  Accounts         Accounts         @relation(fields: [AccountID], references: [AccountID])
+  AccountLevelCode Int              @db.TinyInt
+  CharacterStatus  CharacterStatus?
+}
+
+model CharacterStatus {
+  CharacterID   Int        @unique
+  Character     Characters @relation(fields: [CharacterID], references: [CharacterID])
+  LikeCount     Int
+  Coin          BigInt
+  WarehouseCoin BigInt
 }

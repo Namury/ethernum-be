@@ -13,3 +13,16 @@ export function createRandomString(length:number) {
     }
     return result;
 }
+
+export function parseBigIntJson(json:object){
+  const bigIntJson = JSON.stringify(json, (key, value) =>
+    typeof value === "bigint" ? `BIGINT::${value}` : value
+  );
+  
+  return JSON.parse(bigIntJson, (key, value) => {
+    if (typeof value === "string" && value.startsWith('BIGINT::')) {
+      return Number(value.substring(8));
+    }
+    return value;
+  });
+} 
