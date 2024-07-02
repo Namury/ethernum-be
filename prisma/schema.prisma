@@ -73,6 +73,8 @@ model Orders {
   Accounts  Accounts @relation(fields: [AccountID], references: [AccountID])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  DuitkuPayment DuitkuPayment[]
 }
 
 model TopUpEvent {
@@ -116,4 +118,22 @@ model CharacterStatus {
   LikeCount     Int
   Coin          BigInt
   WarehouseCoin BigInt
+}
+
+model DuitkuPayment {
+  id               Int     @unique @default(autoincrement())
+  merchantCode     String
+  paymentAmount    String
+  merchantOrderId  Int?
+  Order            Orders?  @relation(fields: [merchantOrderId], references: [order_id])
+  productDetail    String?
+  additionalParam  String?
+  paymentCode      String
+  resultCode       String
+  merchantUserId   String?
+  reference        String
+  publisherOrderId String
+  spUserHash       String?
+  settlementDate   String
+  issuerCode       String
 }
