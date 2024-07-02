@@ -40,18 +40,19 @@ export interface duitkuInvoiceResponse {
 
 export interface duitkuCallbackRequest {
     merchantCode: string;
-    paymentAmount: string;
-    merchantOrderId: number;
-    productDetail: string;
-    additionalParam: string;
-    paymentCode: string;
-    resultCode: string;
-    merchantUserId: string;
-    reference: string;
-    publisherOrderId: string;
-    spUserHash: string;
-    settlementDate: string;
-    issuerCode: string;
+    amount?: string;
+    paymentAmount?: string;
+    merchantOrderId?: number;
+    productDetail?: string;
+    additionalParam?: string;
+    paymentCode?: string;
+    resultCode?: string;
+    merchantUserId?: string;
+    reference?: string;
+    publisherOrderId?: string;
+    spUserHash?: string;
+    settlementDate?: string;
+    issuerCode?: string;
 }
 
 

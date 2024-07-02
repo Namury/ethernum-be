@@ -123,17 +123,17 @@ model CharacterStatus {
 model DuitkuPayment {
   id               Int     @unique @default(autoincrement())
   merchantCode     String
-  paymentAmount    String
+  amount           Decimal?
   merchantOrderId  Int?
-  Order            Orders?  @relation(fields: [merchantOrderId], references: [order_id])
+  Order            Orders? @relation(fields: [merchantOrderId], references: [order_id])
   productDetail    String?
   additionalParam  String?
-  paymentCode      String
-  resultCode       String
+  paymentCode      String?
+  resultCode       String?
   merchantUserId   String?
-  reference        String
-  publisherOrderId String
+  reference        String?
+  publisherOrderId String?
   spUserHash       String?
-  settlementDate   String
-  issuerCode       String
+  settlementDate   String?
+  issuerCode       String?
 }
