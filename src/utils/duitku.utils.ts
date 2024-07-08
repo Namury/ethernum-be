@@ -15,7 +15,7 @@ export interface createInvoiceRequest {
     username: string;
     email: string;
     reffcode: string;
-    order_id: number;
+    order_id: string;
     amount: number;
     status: string;
     AccountID: number;
@@ -23,6 +23,7 @@ export interface createInvoiceRequest {
 
 export interface duitkuInvoiceRequest {
     paymentAmount: number;
+    merchantUserInfo?: string;
     merchantOrderId?: string;
     productDetails: string;
     email: string;
@@ -42,7 +43,7 @@ export interface duitkuCallbackRequest {
     merchantCode: string;
     amount?: string;
     paymentAmount?: string;
-    merchantOrderId?: number;
+    merchantOrderId?: string;
     productDetail?: string;
     additionalParam?: string;
     paymentCode?: string;

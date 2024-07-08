@@ -10,7 +10,6 @@ import { CreateOrderRequest, GetOrderByUserRequest } from "$utils/order.utils";
 export async function createOrder(req: Request, res: Response) {
   try {
     const orderData: CreateOrderRequest = req.body
-    orderData.order_id = Number(orderData.order_id)
     orderData.AccountID = Number(orderData.AccountID)
 
     const { status, data, error } = await createOrderService(orderData);

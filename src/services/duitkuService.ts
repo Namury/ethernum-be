@@ -9,9 +9,10 @@ import {
   duitkuInvoiceRequest,
   duitkuInvoiceResponse
 } from "$utils/duitku.utils";
+import { createOrderService } from "./orderService";
 
 export async function createInvoiceService(
-  invoice: createInvoiceRequest
+  invoice: createInvoiceRequest,
 ): Promise<response> {
   try {
     const timeStampJakarta = String(new Date().getTime())
@@ -24,8 +25,14 @@ export async function createInvoiceService(
       'x-duitku-merchantcode': duitkuConfig.merchantCode
     }
 
+    const order = await createOrderService(invoice)
+    if(!order.status){
+      throw new Error("Failed create order")
+    }
+
     const duitkuInvoiceRequest: duitkuInvoiceRequest = {
       email: invoice.email,
+      merchantUserInfo: String(invoice.AccountID),
       paymentAmount: Number(invoice.amount),
       productDetails: `Top Up ${invoice.username}`,
       callbackUrl: duitkuConfig.callbackUrl,
@@ -58,7 +65,7 @@ export async function createCallbackService(
   callback: duitkuCallbackRequest
 ): Promise<response> {
   try {
-    callback.merchantOrderId = Number(callback.merchantOrderId)
+
     const createdPayment = await prisma.duitkuPayment.create({
       data: { ...callback }
     });

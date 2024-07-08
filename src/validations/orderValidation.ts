@@ -15,10 +15,10 @@ export async function validateCreateOrderRequest(
   // if (!reffcode) return response_bad_request(res, "reffcode is required");
   if (!order_id) return response_bad_request(res, "order_id is required");
   if (order_id) {
-    if (Number.isNaN(Number(order_id))) return response_bad_request(res, "order id must be a number");
+    // if (Number.isNaN(Number(order_id))) return response_bad_request(res, "order id must be a number");
     const checkOrderId = await prisma.orders.findUnique({
       where: {
-        order_id: Number(order_id)
+        order_id: order_id
       }
     })
 

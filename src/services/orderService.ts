@@ -45,13 +45,13 @@ export async function createOrderService(
     return {
       status: true,
       data: { order: createdOrder },
-      message: "Register Success",
+      message: "Create Order Success",
     };
   } catch (err: unknown) {
     return {
       status: false,
       data: {},
-      message: "Register Failed",
+      message: "Create Order Failed",
       error: String(err),
     };
   }
@@ -64,19 +64,21 @@ export async function getOrderByUserService(
     const orders = await prisma.orders.findMany({
       where: {
         AccountID: user.AccountID
+      }, include: {
+        DuitkuPayment: true
       }
     });
 
     return {
       status: true,
       data: { order: orders },
-      message: "Register Success",
+      message: "Get Order by User ID Success",
     };
   } catch (err: unknown) {
     return {
       status: false,
       data: {},
-      message: "Register Failed",
+      message: "Get Order by User ID Failed",
       error: String(err),
     };
   }
