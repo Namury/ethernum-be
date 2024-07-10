@@ -136,4 +136,5 @@ model DuitkuPayment {
   spUserHash       String?
   settlementDate   String?
   issuerCode       String?
+  signature        String?
 }

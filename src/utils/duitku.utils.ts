@@ -54,6 +54,7 @@ export interface duitkuCallbackRequest {
     spUserHash?: string;
     settlementDate?: string;
     issuerCode?: string;
+    signature?: string;
 }
 
 
