@@ -16,7 +16,7 @@ export function validateLoginRequest(
 ) {
   const { username, password } = req.body;
 
-  if (!username) return response_bad_request(res, "Username/Email is required");
+  if (!username) return response_bad_request(res, "Username is required");
   if (!password) return response_bad_request(res, "Password is required");
   next();
 }

@@ -8,7 +8,7 @@ export async function validateCreateInvoiceRequest(
   res: Response,
   next: NextFunction
 ) {
-  const { AccountID, amount, email, order_id, reffcode, status, username, }: CreateOrderRequest = req.body;
+  const { amount, email, order_id, reffcode, status, username, }: CreateOrderRequest = req.body;
 
   if (!username) return response_bad_request(res, "username is required");
   if (!email) return response_bad_request(res, "email is required");
@@ -28,7 +28,6 @@ export async function validateCreateInvoiceRequest(
   }
   if (!amount) return response_bad_request(res, "amount is required");
   if (!status) return response_bad_request(res, "status is required");
-  if (!AccountID) return response_bad_request(res, "AccountID is required");
   next();
 }
 
@@ -37,7 +36,7 @@ export async function validateCreateCallbackRequest(
   res: Response,
   next: NextFunction
 ) {
-  const { AccountID, amount, email, order_id, reffcode, status, username, }: CreateOrderRequest = req.body;
+  const { amount, email, order_id, reffcode, status, username, }: CreateOrderRequest = req.body;
 
   if (!username) return response_bad_request(res, "username is required");
   if (!email) return response_bad_request(res, "email is required");
@@ -57,6 +56,5 @@ export async function validateCreateCallbackRequest(
   }
   if (!amount) return response_bad_request(res, "amount is required");
   if (!status) return response_bad_request(res, "status is required");
-  if (!AccountID) return response_bad_request(res, "AccountID is required");
   next();
 }

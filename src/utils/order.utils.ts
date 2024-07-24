@@ -5,7 +5,6 @@ export interface CreateOrderRequest {
   order_id: string;
   amount: number;
   status: string;
-  AccountID: number;
 }
 
 export interface GetOrderByUserRequest {

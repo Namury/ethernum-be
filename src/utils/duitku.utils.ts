@@ -18,7 +18,6 @@ export interface createInvoiceRequest {
     order_id: string;
     amount: number;
     status: string;
-    AccountID: number;
 }
 
 export interface duitkuInvoiceRequest {
@@ -29,8 +28,13 @@ export interface duitkuInvoiceRequest {
     email: string;
     callbackUrl?: string;
     returnUrl?: string;
+    customerDetail: customerDetail;
 }
 
+interface customerDetail {
+    firstName: string;
+    email: string;
+}
 export interface duitkuInvoiceResponse {
     merchantCode: string;
     reference: string;

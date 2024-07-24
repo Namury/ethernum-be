@@ -30,9 +30,6 @@ export async function authLoginService(
   try {
     let condition: object;
     condition = { AccountName: username };
-    if (emailRegex.test(username)) {
-      condition = { email: username };
-    }
 
     const user = await prisma.accounts.findUnique({
       where: condition

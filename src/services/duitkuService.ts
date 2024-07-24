@@ -32,12 +32,16 @@ export async function createInvoiceService(
 
     const duitkuInvoiceRequest: duitkuInvoiceRequest = {
       email: invoice.email,
-      merchantUserInfo: String(invoice.AccountID),
+      merchantUserInfo: String(invoice.username),
       paymentAmount: Number(invoice.amount),
       productDetails: `Top Up ${invoice.username}`,
       callbackUrl: duitkuConfig.callbackUrl,
       merchantOrderId: String(invoice.order_id),
-      returnUrl: duitkuConfig.returnUrl
+      returnUrl: duitkuConfig.returnUrl,
+      customerDetail: {
+        email: invoice.email,
+        firstName: invoice.username
+      }
     }
 
     const duitkuResponse = await axios.post(duitkuConfig.createInvoiceURL, duitkuInvoiceRequest, {

@@ -99,7 +99,7 @@ model PVERanking {
   GuildName      String   @db.NVarChar(50)
   TotalRank      Int
   DifficultyStep Int      @db.SmallInt
-  ClearTime      DateTime
+  ClearTime      String
   MapID          Int
 }
 

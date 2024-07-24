@@ -10,7 +10,6 @@ import { createInvoiceRequest, duitkuCallbackRequest } from "$utils/duitku.utils
 export async function createInvoice(req: Request, res: Response) {
   try {
     const invoiceData: createInvoiceRequest = req.body
-    invoiceData.AccountID = Number(invoiceData.AccountID)
 
     const { status, data, error } = await createInvoiceService(invoiceData);
     if (status) {

@@ -36,10 +36,30 @@ export async function createOrderService(
       }
     }
 
+    // get user
+    const user = await prisma.accounts.findUnique({
+      where: {AccountName: order.username}
+    })
+    if(!user){
+      return{
+        status: false,
+        data: {},
+        message: "User not Found",
+        error: "User not Found",
+      }
+    }
 
     order.amount = order.amount * amountMultiplier
     const createdOrder = await prisma.orders.create({
-      data: { ...order }
+      data: { 
+        amount: order.amount,
+        email: order.email,
+        order_id: order.order_id,
+        reffcode: order.reffcode,
+        status: order.status,
+        username: user.AccountName,
+        AccountID: user.AccountID,
+       }
     });
 
     return {
