@@ -27,7 +27,12 @@ export async function createOrderService(
     //check reffcode
     if (order.reffcode) {
       const findReffcode = await prisma.accounts.findFirst({
-        where: { ReferralCode: order.reffcode },
+        where: {
+          AND: {
+            ReferralCode: order.reffcode,
+            AccountName: { not: order.username }
+          }
+        },
         select: { AccountID: true }
       })
 
