@@ -4,7 +4,11 @@ import { response } from "$utils/response.utils";
 
 export async function getVipRankService(): Promise<response> {
   try {
-    const vipRanks = await prisma.vipRank.findMany();
+    const vipRanks = await prisma.vipRank.findMany({
+      orderBy: {
+        point: "desc"
+      }
+    });
 
     return {
       status: true,
@@ -96,7 +100,7 @@ export async function getPveRankService(mapId: Number | null): Promise<response>
 
     let pveRanks: pveRanksResponse
     if (mapId === null) {
-        pveRanks = await prisma.$queryRaw`
+      pveRanks = await prisma.$queryRaw`
         SELECT TotalRank, CharacterName, GuildName, DifficultyStep, ClearTime 
         FROM PVERanking 
       `;

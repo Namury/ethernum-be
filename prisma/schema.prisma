@@ -138,3 +138,8 @@ model DuitkuPayment {
   issuerCode       String?
   signature        String?
 }
+
+model DNAuth {
+  id             Int @unique @default(autoincrement())
+  CertifyingStep Int @default(0)
+}

@@ -16,6 +16,7 @@ import {
   ResetPasswordRequest,
   VerifyUserRequest
 } from "$utils/auth.utils";
+import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 
 export async function login(req: Request, res: Response): Promise<Response> {
@@ -96,5 +97,21 @@ export async function resetPassword(req: Request, res: Response) {
 
   } catch (err: unknown) {
     return response_internal_server_error(res, String(err));
+  }  
+}
+
+export async function checkJwtToken(req: Request, res: Response) {
+  const authHeader = <string>req.headers.authorization
+  const token = authHeader && authHeader.split(' ')[1]
+  let jwtPayload;
+
+  try {
+    jwtPayload = (
+      jwt.verify(token, process.env.JWT_SECRET_TOKEN?.toString() || "")
+    );
+    res.locals.jwtPayload = jwtPayload;
+    return response_success(res);
+  } catch (err: unknown) {
+    return response_unauthorized(res, <string>err);
   }
 }
