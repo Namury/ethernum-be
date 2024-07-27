@@ -4,7 +4,6 @@ export interface CreateOrderRequest {
   reffcode: string;
   order_id: string;
   amount: number;
-  status: string;
 }
 
 export interface GetOrderByUserRequest {

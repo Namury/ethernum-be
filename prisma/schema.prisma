@@ -52,7 +52,7 @@ model Donors {
 
 model VipRank {
   id        Int      @unique @default(autoincrement())
-  username  String
+  username  String   @unique
   point     Int
   AccountID Int
   Accounts  Accounts @relation(fields: [AccountID], references: [AccountID])
@@ -95,10 +95,10 @@ model PVPRanking {
 }
 
 model PVERanking {
-  CharacterName  String   @unique @db.NVarChar(50)
-  GuildName      String   @db.NVarChar(50)
+  CharacterName  String @unique @db.NVarChar(50)
+  GuildName      String @db.NVarChar(50)
   TotalRank      Int
-  DifficultyStep Int      @db.SmallInt
+  DifficultyStep Int    @db.SmallInt
   ClearTime      String
   MapID          Int
 }

@@ -69,10 +69,27 @@ export async function createCallbackService(
   callback: duitkuCallbackRequest
 ): Promise<response> {
   try {
-
     const createdPayment = await prisma.duitkuPayment.create({
       data: { ...callback }
     });
+
+    if (callback.resultCode == "00"){
+      const updateOrderStatus = await prisma.orders.update({
+        where: {
+          order_id: callback.merchantOrderId
+        }, data: {
+          status: "Payment Success"
+        }
+      })
+      if(!updateOrderStatus){
+        return {
+          status: false,
+          data: {},
+          message: "Duitku Callback Failed",
+          error: "Error Update Order",
+        }; 
+      }
+    }
 
     return {
       status: true,

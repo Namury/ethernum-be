@@ -38,15 +38,22 @@ export async function createOrderService(
 
       if (findReffcode) {
         amountMultiplier = amountMultiplier + 0.05 // add 5% to amount multiplier
+      }else {
+        return {
+          status: false,
+          data: {},
+          message: "Reffcode not Found",
+          error: "Reffcode not Found",
+        }
       }
     }
 
     // get user
     const user = await prisma.accounts.findUnique({
-      where: {AccountName: order.username}
+      where: { AccountName: order.username }
     })
-    if(!user){
-      return{
+    if (!user) {
+      return {
         status: false,
         data: {},
         message: "User not Found",
@@ -54,19 +61,38 @@ export async function createOrderService(
       }
     }
 
-    order.amount = order.amount * amountMultiplier
+    const multipliedAmount = order.amount * amountMultiplier
     const createdOrder = await prisma.orders.create({
-      data: { 
-        amount: order.amount,
+      data: {
+        amount: multipliedAmount,
         email: order.email,
         order_id: order.order_id,
         reffcode: order.reffcode,
-        status: order.status,
+        status: "Payment Pending",
         username: user.AccountName,
         AccountID: user.AccountID,
-       }
+      }
     });
 
+    const updateVipRankings = await prisma.vipRank.update({
+      where: {
+        username: user.AccountName
+      }, data: {
+        point: {
+          increment: order.amount
+        } 
+      }
+    })
+
+    if(!updateVipRankings){
+      return {
+        status: false,
+        data: {},
+        message: "Failed udpate vipranking",
+        error: "Failed udpate vipranking",
+      }
+    }
+    
     return {
       status: true,
       data: { order: createdOrder },
