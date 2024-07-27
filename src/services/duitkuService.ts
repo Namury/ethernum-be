@@ -27,7 +27,13 @@ export async function createInvoiceService(
 
     const order = await createOrderService(invoice)
     if(!order.status){
-      throw new Error("Failed create order")
+      console.log(order)
+      return {
+        status: false,
+        data: {},
+        message: "error create order",
+        error: String(order.error),
+      };
     }
 
     const duitkuInvoiceRequest: duitkuInvoiceRequest = {
@@ -88,6 +94,42 @@ export async function createCallbackService(
           message: "Duitku Callback Failed",
           error: "Error Update Order",
         }; 
+      }
+
+      const user = await prisma.accounts.findUnique({
+        where: {AccountName: callback.merchantUserId}
+      })
+      if(!user){
+        return {
+          status: false,
+          data: {},
+          message: "Failed udpate vipranking: user not found",
+          error: "Failed udpate vipranking: user not found",
+        } 
+      }
+      const updateVipRankings = await prisma.vipRank.upsert({
+        where: {
+          username: user.AccountName
+        }, 
+        update: {
+          point: {
+            increment: Number(callback.amount)
+          } 
+        }, 
+        create: {
+          point: Number(callback.amount),
+          username: user.AccountName,
+          AccountID: user.AccountID 
+        }
+      })
+  
+      if(!updateVipRankings){
+        return {
+          status: false,
+          data: {},
+          message: "Failed udpate vipranking",
+          error: "Failed udpate vipranking",
+        }
       }
     }
 

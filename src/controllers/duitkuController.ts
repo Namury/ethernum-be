@@ -1,7 +1,7 @@
 import {
   response_internal_server_error,
   response_success,
-  response_unauthorized,
+  response_bad_request
 } from "$utils/response.utils";
 import { Request, Response } from "express";
 import { createCallbackService, createInvoiceService } from "$services/duitkuService";
@@ -15,7 +15,7 @@ export async function createInvoice(req: Request, res: Response) {
     if (status) {
       return response_success(res, data);
     } else {
-      return response_unauthorized(res, error);
+      return response_bad_request(res, error);
     }
 
   } catch (err: unknown) {
@@ -31,7 +31,7 @@ export async function createCallback(req: Request, res: Response) {
     if (status) {
       return response_success(res, data);
     } else {
-      return response_unauthorized(res, error);
+      return response_bad_request(res, error);
     }
 
   } catch (err: unknown) {

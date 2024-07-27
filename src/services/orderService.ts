@@ -73,26 +73,15 @@ export async function createOrderService(
         AccountID: user.AccountID,
       }
     });
-
-    const updateVipRankings = await prisma.vipRank.update({
-      where: {
-        username: user.AccountName
-      }, data: {
-        point: {
-          increment: order.amount
-        } 
-      }
-    })
-
-    if(!updateVipRankings){
+    if(!createdOrder){
       return {
         status: false,
         data: {},
-        message: "Failed udpate vipranking",
-        error: "Failed udpate vipranking",
+        message: "Failed Create Order",
+        error: "Failed Create Order",
       }
     }
-    
+
     return {
       status: true,
       data: { order: createdOrder },

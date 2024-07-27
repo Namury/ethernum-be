@@ -17,7 +17,6 @@ export interface createInvoiceRequest {
     reffcode: string;
     order_id: string;
     amount: number;
-    status: string;
 }
 
 export interface duitkuInvoiceRequest {
