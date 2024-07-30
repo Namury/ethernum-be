@@ -96,7 +96,7 @@ export async function authRegisterService(
       select: selectedUserField,
     });
 
-    const verifyUrl = `${process.env.BASE_URL?.toString()}auth/verify?email=${createdUser.email}&verify_token=${verificationToken}`
+    const verifyUrl = `${process.env.BASE_URL_FE?.toString()}login?email=${createdUser.email}&verify_token=${verificationToken}`
     const html = emailVerify(verifyUrl)
     const subject = 'Email Verification'
     await sendMail(html, createdUser.email, subject);
