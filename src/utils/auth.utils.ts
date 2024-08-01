@@ -27,7 +27,7 @@ export interface ResetPasswordRequest {
 
 export interface LoginResponse {
   token: string;
-  name: string;
+  name: string|null;
   username: string;
   email: string;
 }
