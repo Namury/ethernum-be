@@ -4,12 +4,14 @@ import { response } from "$utils/response.utils";
 
 export async function getVipRankService(): Promise<response> {
   try {
-    const vipRanks = await prisma.vipRank.findMany({
-      orderBy: {
-        point: "desc"
-      }
-    });
-
+    interface vipRanksResponse {
+      username: String
+      point: Number
+    }
+    
+    const vipRanks:vipRanksResponse = await prisma.$queryRaw`
+      SELECT * FROM dnmembership.dbo.VIPRANK ORDER BY point DESC
+    `
     return {
       status: true,
       data: vipRanks,
@@ -36,9 +38,9 @@ export async function getGoldRankService(): Promise<response> {
     const goldRanks: goldRanksResponse[] =
       await prisma.$queryRaw`
         SELECT C.CharacterName, CS.Coin, CS.WarehouseCoin
-        FROM CharacterStatus CS
-        JOIN Characters C ON CS.CharacterID = C.CharacterID
-        WHERE C.AccountLevelCode != 99
+        FROM DNWorld.dbo.CharacterStatus CS
+        JOIN DNWorld.dbo.Characters C ON CS.CharacterID = C.CharacterID
+        WHERE C.AccountLevelCode  != 99
         ORDER BY CS.Coin DESC, CS.WarehouseCoin DESC
       `;
 
@@ -67,8 +69,8 @@ export async function getLikeRankService(): Promise<response> {
     }
     const likeRanks: likeRanksResponse = await prisma.$queryRaw`
       SELECT TOP 100 C.CharacterName, CS.LikeCount
-      FROM CharacterStatus CS
-      JOIN Characters C ON CS.CharacterID = C.CharacterID
+      FROM DNWorld.dbo.CharacterStatus CS
+      JOIN DNWorld.dbo.Characters C ON CS.CharacterID = C.CharacterID
       WHERE C.AccountLevelCode != 99 AND CS.LikeCount >= 100
       ORDER BY CS.LikeCount DESC
     `;
@@ -102,16 +104,15 @@ export async function getPveRankService(mapId: Number | null): Promise<response>
     if (mapId === null) {
       pveRanks = await prisma.$queryRaw`
         SELECT TotalRank, CharacterName, GuildName, DifficultyStep, ClearTime 
-        FROM PVERanking 
+        FROM DNWorld.dbo.PVERanking 
       `;
     } else {
       pveRanks = await prisma.$queryRaw`
         SELECT TotalRank, CharacterName, GuildName, DifficultyStep, ClearTime 
         FROM PVERanking
-        WHERE PVERanking.MapID = ${mapId}
+        WHERE DNWorld.dbo.PVERanking.MapID = ${mapId}
       `
     }
-
 
     return {
       status: true,
@@ -140,7 +141,7 @@ export async function getPvpRankService(): Promise<response> {
 
     const pvpRanks: pvpRanksResponse = await prisma.$queryRaw`
       SELECT CharacterName, GuildName, PVPExp, [Kill], Death
-      FROM PVPRanking
+      FROM DNWorld.dbo.PVPRanking
       ORDER BY PVPExp DESC, [Kill] DESC, Death ASC
       OFFSET 0 ROWS FETCH NEXT 100 ROWS ONLY
     `;

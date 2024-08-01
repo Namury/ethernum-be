@@ -4,7 +4,9 @@ import { response } from "$utils/response.utils";
 export async function getDashboardStatsService(): Promise<response> {
   try {
     const accountRegistered = await prisma.accounts.count()
-    const onlinePlayers = await prisma.dNAuth.count({ where: { CertifyingStep: 2 } })
+    const onlinePlayers = await prisma.$queryRaw`
+      SELECT COUNT(*) AS TotalCount FROM DNAuth WHERE CertifyingStep = 2
+    `
     const characterCreated = await prisma.characters.count()
 
     return {

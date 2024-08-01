@@ -15,7 +15,7 @@ datasource db {
 model Accounts {
   AccountID                  Int          @unique @default(autoincrement())
   AccountName                String       @unique @db.NVarChar(50)
-  name                       String
+  name                       String?
   email                      String       @unique
   QQ3462895993               String
   AccountLevelCode           Int          @default(0)
@@ -33,7 +33,7 @@ model Accounts {
   VerificationToken          String?
   VerificationTokenExpiresAt DateTime?
   EmailVerified              Boolean      @default(false) @db.Bit
-  ReferralCode               String?
+  ReferralCode               String? @map("referral_code")
   Donors                     Donors[]
   VipRank                    VipRank[]
   Orders                     Orders[]

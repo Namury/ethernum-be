@@ -21,6 +21,7 @@ export function parseBigIntJson(json:object){
   
   return JSON.parse(bigIntJson, (key, value) => {
     if (typeof value === "string" && value.startsWith('BIGINT::')) {
+      if(key === "Coin") return Number(value.substring(8).slice(0,-4));
       return Number(value.substring(8));
     }
     return value;
