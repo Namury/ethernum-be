@@ -114,7 +114,7 @@ export async function createCallbackService(
       }
       
       const currentVipRanks:vipRanksResponse = await prisma.$queryRaw`
-        SELECT * FROM dnmembership.dbo.VIPRANK V WHERE V.username  == ${user.AccountName}
+        SELECT * FROM dnmembership.dbo.VIPRANK V WHERE V.username=${user.AccountName}
       `
 
       var updateVipRankings = 0
