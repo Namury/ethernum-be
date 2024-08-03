@@ -107,21 +107,26 @@ export async function createCallbackService(
           error: "Failed udpate vipranking: user not found",
         } 
       }
-      const updateVipRankings = await prisma.vipRank.upsert({
-        where: {
-          username: user.AccountName
-        }, 
-        update: {
-          point: {
-            increment: Number(callback.amount)
-          } 
-        }, 
-        create: {
-          point: Number(callback.amount),
-          username: user.AccountName,
-          AccountID: user.AccountID 
-        }
-      })
+
+      interface vipRanksResponse {
+        username: String
+        point: Number
+      }
+      
+      const currentVipRanks:vipRanksResponse = await prisma.$queryRaw`
+        SELECT * FROM dnmembership.dbo.VIPRANK V WHERE V.username  == ${user.AccountName}
+      `
+
+      var updateVipRankings = 0
+      if(!currentVipRanks){
+        updateVipRankings = await prisma.$executeRaw`
+        INSERT INTO dnmembership.dbo.VIPRANK (username, point) values (${user.AccountName}, ${callback.amount})
+      `
+      }else {
+        updateVipRankings = await prisma.$executeRaw`
+        UPDATE dnmembership.dbo.VIPRANK SET point=${currentVipRanks.point + callback.amount} WHERE username =${user.AccountName} 
+      `
+      }
   
       if(!updateVipRankings){
         return {

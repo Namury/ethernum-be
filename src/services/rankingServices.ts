@@ -109,8 +109,8 @@ export async function getPveRankService(mapId: Number | null): Promise<response>
     } else {
       pveRanks = await prisma.$queryRaw`
         SELECT TotalRank, CharacterName, GuildName, DifficultyStep, ClearTime 
-        FROM PVERanking
-        WHERE DNWorld.dbo.PVERanking.MapID = ${mapId}
+        FROM DNWorld.dbo.PVERanking.MapID P
+        WHERE P.MapID = ${mapId}
       `
     }
 

@@ -44,7 +44,7 @@ export interface duitkuInvoiceResponse {
 
 export interface duitkuCallbackRequest {
     merchantCode: string;
-    amount?: string;
+    amount: string;
     paymentAmount?: string;
     merchantOrderId?: string;
     productDetail?: string;
