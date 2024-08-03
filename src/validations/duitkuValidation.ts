@@ -41,18 +41,18 @@ export async function validateCreateCallbackRequest(
   if (!email) return response_bad_request(res, "email is required");
   // if (!reffcode) return response_bad_request(res, "reffcode is required");
   if (!order_id) return response_bad_request(res, "order_id is required");
-  if (order_id) {
-    // if (Number.isNaN(Number(order_id))) return response_bad_request(res, "order id must be a number");
-    const checkOrderId = await prisma.duitkuOrders.findUnique({
-      where: {
-        order_id: order_id
-      }
-    })
+  // if (order_id) {
+  //   // if (Number.isNaN(Number(order_id))) return response_bad_request(res, "order id must be a number");
+  //   const checkOrderId = await prisma.duitkuOrders.findUnique({
+  //     where: {
+  //       order_id: order_id
+  //     }
+  //   })
 
-    if (checkOrderId) {
-      return response_conflict(res, 'order ID already exist')
-    }
-  }
+  //   if (checkOrderId) {
+  //     return response_conflict(res, 'order ID already exist')
+  //   }
+  // }
   if (!amount) return response_bad_request(res, "amount is required");
   next();
 }
