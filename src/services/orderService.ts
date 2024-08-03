@@ -62,7 +62,7 @@ export async function createOrderService(
     }
 
     const multipliedAmount = order.amount * amountMultiplier
-    const createdOrder = await prisma.orders.create({
+    const createdOrder = await prisma.duitkuOrders.create({
       data: {
         amount: multipliedAmount,
         email: order.email,
@@ -101,7 +101,7 @@ export async function getOrderByUserService(
   user: GetOrderByUserRequest
 ): Promise<response> {
   try {
-    const orders = await prisma.orders.findMany({
+    const orders = await prisma.duitkuOrders.findMany({
       where: {
         AccountID: user.AccountID
       }, include: {

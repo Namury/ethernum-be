@@ -36,7 +36,7 @@ model Accounts {
   ReferralCode               String? @map("referral_code")
   Donors                     Donors[]
   VipRank                    VipRank[]
-  Orders                     Orders[]
+  Orders                     DuitkuOrders[]
   Characters                 Characters[]
 }
 
@@ -61,7 +61,7 @@ model VipRank {
   updatedAt DateTime @updatedAt
 }
 
-model Orders {
+model DuitkuOrders {
   id        Int      @unique @default(autoincrement())
   username  String
   email     String
@@ -125,7 +125,7 @@ model DuitkuPayment {
   merchantCode     String
   amount           String?
   merchantOrderId  String?
-  Order            Orders? @relation(fields: [merchantOrderId], references: [order_id])
+  DuitkuOrders     DuitkuOrders? @relation(fields: [merchantOrderId], references: [order_id])
   productDetail    String?
   additionalParam  String?
   paymentCode      String?

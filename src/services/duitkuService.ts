@@ -80,7 +80,7 @@ export async function createCallbackService(
     });
 
     if (callback.resultCode == "00"){
-      const updateOrderStatus = await prisma.orders.update({
+      const updateOrderStatus = await prisma.duitkuOrders.update({
         where: {
           order_id: callback.merchantOrderId
         }, data: {
