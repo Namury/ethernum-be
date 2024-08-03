@@ -84,7 +84,7 @@ export async function createCallbackService(
         where: {
           order_id: callback.merchantOrderId
         }, data: {
-          status: "Payment Success"
+          status: "Paid"
         }
       })
       if(!updateOrderStatus){

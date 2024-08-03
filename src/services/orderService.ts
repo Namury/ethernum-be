@@ -68,7 +68,7 @@ export async function createOrderService(
         email: order.email,
         order_id: order.order_id,
         reffcode: order.reffcode,
-        status: "Payment Pending",
+        status: "Unpaid",
         username: user.AccountName,
         AccountID: user.AccountID,
       }
