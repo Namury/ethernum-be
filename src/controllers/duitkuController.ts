@@ -27,10 +27,12 @@ export async function createCallback(req: Request, res: Response) {
   try {
     const callback: duitkuCallbackRequest = req.body
     console.log("CALLBACK BODY", req.body)
-    const { status, data, error } = await createCallbackService(callback);
+    const { status, data, message, error } = await createCallbackService(callback);
     if (status) {
       return response_success(res, data);
     } else {
+      console.log('error', error)
+      console.log('message', message)
       return response_bad_request(res, error);
     }
 
