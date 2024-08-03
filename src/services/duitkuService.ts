@@ -124,7 +124,7 @@ export async function createCallbackService(
       `
       }else {
         updateVipRankings = await prisma.$executeRaw`
-        UPDATE dnmembership.dbo.VIPRANK SET point=${currentVipRanks.point + callback.amount} WHERE username=${user.AccountName} 
+        UPDATE dnmembership.dbo.VIPRANK SET point=${currentVipRanks.point + callback.amount} WHERE username =${user.AccountName} 
       `
       }
   

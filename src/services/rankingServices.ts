@@ -32,7 +32,8 @@ export async function getGoldRankService(): Promise<response> {
     interface goldRanksResponse {
       CharacterName: String,
       Coin: Number,
-      WarehouseCoin: Number
+      WarehouseCoin: Number,
+      TotalCoin: Number
     }
 
     const goldRanks: goldRanksResponse[] =
@@ -46,9 +47,20 @@ export async function getGoldRankService(): Promise<response> {
 
     const goldRanksJson: goldRanksResponse[] = parseBigIntJson(goldRanks);
 
+    const processedGoldRanking = goldRanksJson.map(goldRank => {
+      const totalCoin = Number(goldRank.Coin)+Number(goldRank.WarehouseCoin)
+      if(totalCoin > 250000){
+        goldRank.TotalCoin =totalCoin
+        return goldRank
+      }
+    }).filter(x => x !== undefined).sort((a,b)=> Number(b?.TotalCoin) - Number(a?.TotalCoin))
+
     return {
       status: true,
-      data: goldRanksJson,
+      data: {
+        ranking: processedGoldRanking, 
+        totalGoldCirulation: processedGoldRanking.map(i=>Number(i?.TotalCoin)).reduce((a,b)=>a+b)
+      },
       message: "Get Gold Ranks Success",
     };
   } catch (err: unknown) {
@@ -103,12 +115,12 @@ export async function getPveRankService(mapId: Number | null): Promise<response>
     let pveRanks: pveRanksResponse
     if (mapId === null) {
       pveRanks = await prisma.$queryRaw`
-        SELECT TotalRank, CharacterName, GuildName, DifficultyStep, ClearTime 
+        SELECT TotalRank, CharacterName, GuildName, (DifficultyStep-DifficultyCode) as DifficultyStep, ClearTime 
         FROM DNWorld.dbo.PVERanking 
       `;
     } else {
       pveRanks = await prisma.$queryRaw`
-        SELECT TotalRank, CharacterName, GuildName, DifficultyStep, ClearTime 
+        SELECT TotalRank, CharacterName, GuildName, (DifficultyStep-DifficultyCode) as DifficultyStep, ClearTime 
         FROM DNWorld.dbo.PVERanking.MapID P
         WHERE P.MapID = ${mapId}
       `
